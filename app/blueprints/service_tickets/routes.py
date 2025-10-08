@@ -11,44 +11,49 @@ def create_service_ticket():
         ticket_data = service_ticket_schema.load(request.json)
     except ValidationError as e:
         return jsonify(e.messages), 400
-    db.session.add(ticket_data)
+    ticket = ServiceTicket(**ticket_data)
+    db.session.add(ticket)
     db.session.commit()
-    return service_ticket_schema.jsonify(ticket_data), 201
+    return jsonify(service_ticket_schema.dump(ticket)), 201
 
 @service_tickets_bp.route("/", methods=['GET'])
 def get_service_tickets():
     query = select(ServiceTicket)
     tickets = db.session.execute(query).scalars().all()
-    return service_tickets_schema.jsonify(tickets)
+    return jsonify(service_tickets_schema.dump(tickets))
 
 @service_tickets_bp.route("/<int:ticket_id>", methods=['GET'])
 def get_service_ticket(ticket_id):
     ticket = db.session.get(ServiceTicket, ticket_id)
     if ticket:
-        return service_ticket_schema.jsonify(ticket), 200
-    return jsonify({"error": "Service ticket not found."}), 404
+        return jsonify(service_ticket_schema.dump(ticket)), 200
+    return jsonify({"error": "Service ticket not found"}), 404
 
 @service_tickets_bp.route("/<int:ticket_id>", methods=['PUT', 'PATCH'])
 def update_service_ticket(ticket_id):
     ticket = db.session.get(ServiceTicket, ticket_id)
     if not ticket:
         return jsonify({"error": "Service ticket not found."}), 404
-    service_ticket_schema.session = db.session
     try:
-        ticket_data = service_ticket_schema.load(request.json, instance=ticket, partial=True)
+        ticket_data = service_ticket_schema.load(request.json, partial=True)
     except ValidationError as e:
         return jsonify(getattr(e, "messages", str(e))), 400
+
+    # Manually update fields
+    for key, value in ticket_data.items():
+        setattr(ticket, key, value)
+ 
     db.session.commit()
-    return service_ticket_schema.jsonify(ticket), 200
+    return jsonify(service_ticket_schema.dump(ticket)), 200
 
 @service_tickets_bp.route("/<int:ticket_id>", methods=['DELETE'])
 def delete_service_ticket(ticket_id):
     ticket = db.session.get(ServiceTicket, ticket_id)
     if not ticket:
-        return jsonify({"error": "Service ticket not found."}), 404
+        return jsonify({"error": "Service ticket not found"}), 404
     db.session.delete(ticket)
     db.session.commit()
-    return jsonify({"message": f'Service ticket id: {ticket_id}, successfully deleted.'}), 200
+    return jsonify({"message": "Service ticket deleted"}), 200
 
 #ADVANCED ENDPOINT 
 

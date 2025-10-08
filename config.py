@@ -3,8 +3,10 @@ class DevelopmentConfig:
     SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:CastycastSQL669@localhost/mechanic_db'
 
 
-class testingConfig:
-    pass
+class TestingConfig:
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///testing.db'
+    DEBUG = True
+    CACHE_TYPE = 'SimpleCache'
 
 class ProductionConfig:
     pass

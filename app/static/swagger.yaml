@@ -1,0 +1,495 @@
+# =========================
+# Swagger/OpenAPI 2.0 Spec
+# =========================
+
+swagger: '2.0'
+info:
+  title: "Backend Service API"
+  description: "API documentation for Customers, Mechanics, Service Tickets, and Inventory"
+  version: "1.0.0"
+
+# -------------------------
+# Server configuration
+# -------------------------
+host: "127.0.0.1:5000"
+schemes:
+  - "http"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+# =========================
+# API Paths (Endpoints)
+# =========================
+paths:
+  # -------- Customers Endpoints --------
+  /customers/:
+    post:
+      summary: Create a new customer
+      # Input data for creating a customer
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/CustomerInput'
+      responses:
+        201:
+          description: Customer created
+          schema:
+            $ref: '#/definitions/Customer'
+    get:
+      summary: Get all customers
+      # Pagination query parameters
+      parameters:
+        - in: query
+          name: page
+          type: integer
+        - in: query
+          name: per_page
+          type: integer
+      responses:
+        200:
+          description: List of customers
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Customer'
+
+  /customers/login:
+    post:
+      summary: Authenticate customer and get token
+      # Login input
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/LoginInput'
+      responses:
+        200:
+          description: JWT token
+          schema:
+            $ref: '#/definitions/Token'
+
+  /customers/{customer_id}:
+    get:
+      summary: Get a single customer
+      parameters:
+        - in: path
+          name: customer_id
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Customer object
+          schema:
+            $ref: '#/definitions/Customer'
+    patch:
+      summary: Update customer fields
+      parameters:
+        - in: path
+          name: customer_id
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/CustomerInput'
+      responses:
+        200:
+          description: Updated customer
+          schema:
+            $ref: '#/definitions/Customer'
+    delete:
+      summary: Delete a customer
+      parameters:
+        - in: path
+          name: customer_id
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success message
+          schema:
+            $ref: '#/definitions/Message'
+
+  # -------- Mechanics Endpoints --------
+  /mechanics/:
+    post:
+      summary: Create a new mechanic
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/MechanicInput'
+      responses:
+        201:
+          description: Mechanic created
+          schema:
+            $ref: '#/definitions/Mechanic'
+    get:
+      summary: Get all mechanics
+      responses:
+        200:
+          description: List of mechanics
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Mechanic'
+
+  /mechanics/{mechanic_id}:
+    get:
+      summary: Get a single mechanic
+      parameters:
+        - in: path
+          name: mechanic_id
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Mechanic object
+          schema:
+            $ref: '#/definitions/Mechanic'
+    patch:
+      summary: Update mechanic fields
+      parameters:
+        - in: path
+          name: mechanic_id
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/MechanicInput'
+      responses:
+        200:
+          description: Updated mechanic
+          schema:
+            $ref: '#/definitions/Mechanic'
+    delete:
+      summary: Delete a mechanic
+      parameters:
+        - in: path
+          name: mechanic_id
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success message
+          schema:
+            $ref: '#/definitions/Message'
+
+  /mechanics/ranked:
+    get:
+      summary: Get mechanics ranked by ticket count
+      # Filtering and sorting query parameters
+      parameters:
+        - in: query
+          name: min_tickets
+          type: integer
+        - in: query
+          name: name
+          type: string
+        - in: query
+          name: limit
+          type: integer
+        - in: query
+          name: sort
+          type: string
+      responses:
+        200:
+          description: Ranked mechanics
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/MechanicRanked'
+
+  /mechanics/search:
+    get:
+      summary: Search mechanics by name or email
+      parameters:
+        - in: query
+          name: name
+          type: string
+        - in: query
+          name: email
+          type: string
+      responses:
+        200:
+          description: Search results
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Mechanic'
+
+  # -------- Service Tickets Endpoints --------
+  /service_tickets/:
+    post:
+      summary: Create a new service ticket
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/ServiceTicketInput'
+      responses:
+        201:
+          description: Service ticket created
+          schema:
+            $ref: '#/definitions/ServiceTicket'
+    get:
+      summary: Get all service tickets
+      responses:
+        200:
+          description: List of service tickets
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ServiceTicket'
+
+  /service_tickets/{ticket_id}:
+    get:
+      summary: Get a single service ticket
+      parameters:
+        - in: path
+          name: ticket_id
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Service ticket object
+          schema:
+            $ref: '#/definitions/ServiceTicket'
+    patch:
+      summary: Update service ticket fields
+      parameters:
+        - in: path
+          name: ticket_id
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/ServiceTicketInput'
+      responses:
+        200:
+          description: Updated service ticket
+          schema:
+            $ref: '#/definitions/ServiceTicket'
+    delete:
+      summary: Delete a service ticket
+      parameters:
+        - in: path
+          name: ticket_id
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success message
+          schema:
+            $ref: '#/definitions/Message'
+
+  /service_tickets/{ticket_id}/add_part:
+    post:
+      summary: Add a part to a service ticket
+      parameters:
+        - in: path
+          name: ticket_id
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/AddPartInput'
+      responses:
+        201:
+          description: Part added
+          schema:
+            $ref: '#/definitions/Message'
+
+  # -------- Inventory Endpoints --------
+  /inventory/:
+    post:
+      summary: Create a new inventory part
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/InventoryInput'
+      responses:
+        201:
+          description: Inventory part created
+          schema:
+            $ref: '#/definitions/Inventory'
+    get:
+      summary: Get all inventory parts
+      responses:
+        200:
+          description: List of inventory parts
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Inventory'
+
+  /inventory/{part_id}:
+    get:
+      summary: Get a single inventory part
+      parameters:
+        - in: path
+          name: part_id
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Inventory part object
+          schema:
+            $ref: '#/definitions/Inventory'
+    patch:
+      summary: Update inventory part fields
+      parameters:
+        - in: path
+          name: part_id
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/InventoryInput'
+      responses:
+        200:
+          description: Updated inventory part
+          schema:
+            $ref: '#/definitions/Inventory'
+    delete:
+      summary: Delete an inventory part
+      parameters:
+        - in: path
+          name: part_id
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success message
+          schema:
+            $ref: '#/definitions/Message'
+
+# =========================
+# Data Definitions (Schemas)
+# =========================
+definitions:
+  # -------- Customer Schemas --------
+  # Used for creating/updating a customer (input)
+  CustomerInput:
+    type: object
+    properties:
+      name: { type: string }        # Customer's name
+      email: { type: string }       # Customer's email
+      phone: { type: string }       # Customer's phone number
+      password: { type: string }    # Customer's password
+
+  # Used for returning customer data (output)
+  Customer:
+    type: object
+    properties:
+      id: { type: integer }         # Unique customer ID
+      name: { type: string }
+      email: { type: string }
+      phone: { type: string }
+
+  # Used for login requests (input)
+  LoginInput:
+    type: object
+    properties:
+      email: { type: string }
+      password: { type: string }
+
+  # Used for login responses (output)
+  Token:
+    type: object
+    properties:
+      token: { type: string }       # JWT token string
+
+  # -------- Mechanic Schemas --------
+  # Used for creating/updating a mechanic (input)
+  MechanicInput:
+    type: object
+    properties:
+      first_name: { type: string }  # Mechanic's first name
+      last_name: { type: string }   # Mechanic's last name
+      email: { type: string }       # Mechanic's email
+
+  # Used for returning mechanic data (output)
+  Mechanic:
+    type: object
+    properties:
+      id: { type: integer }         # Unique mechanic ID
+      first_name: { type: string }
+      last_name: { type: string }
+      email: { type: string }
+
+  # Used for ranked mechanic output (output)
+  MechanicRanked:
+    type: object
+    properties:
+      id: { type: integer }
+      first_name: { type: string }
+      ticket_count: { type: integer } # Number of tickets assigned
+
+  # -------- Service Ticket Schemas --------
+  # Used for creating/updating a service ticket (input)
+  ServiceTicketInput:
+    type: object
+    properties:
+      customer_id: { type: integer } # ID of the customer
+      description: { type: string }  # Description of the service
+
+  # Used for returning service ticket data (output)
+  ServiceTicket:
+    type: object
+    properties:
+      id: { type: integer }          # Unique ticket ID
+      customer_id: { type: integer }
+      description: { type: string }
+
+  # Used for adding a part to a service ticket (input)
+  AddPartInput:
+    type: object
+    properties:
+      part_id: { type: integer }     # Inventory part ID
+      quantity: { type: integer }    # Quantity of the part
+
+  # -------- Inventory Schemas --------
+  # Used for creating/updating an inventory part (input)
+  InventoryInput:
+    type: object
+    properties:
+      part_name: { type: string }        # Name of the part
+      part_number: { type: string }      # Unique part number
+      quantity_in_stock: { type: integer } # Quantity available
+      price: { type: number, format: float } # Price per unit
+
+  # Used for returning inventory part data (output)
+  Inventory:
+    type: object
+    properties:
+      id: { type: integer }              # Unique inventory ID
+      part_name: { type: string }
+      part_number: { type: string }
+      quantity_in_stock: { type: integer }
+      price: { type: number, format: float }
+
+  # -------- Generic Message Schema --------
+  # Used for success/error messages (output)
+  Message:
+    type: object
+    properties:
+      message: { type: string }          # Message text
