@@ -19,6 +19,23 @@ consumes:
 produces:
   - "application/json"
 
+tags:
+  - name: customers
+    description: Operations related to customers
+  - name: mechanics
+    description: Operations related to mechanics
+  - name: service_tickets
+    description: Operations related to service tickets
+  - name: inventory
+    description: Operations related to inventory parts
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: 'JWT Authorization header using the Bearer scheme. Example: "Authorization: Bearer {token}"'
+
 # =========================
 # API Paths (Endpoints)
 # =========================
@@ -230,7 +247,14 @@ paths:
   # -------- Service Tickets Endpoints --------
   /service_tickets/:
     post:
+      tags:
+        - service_tickets
       summary: Create a new service ticket
+      description: |
+        Creates a new service ticket for a customer and vehicle.
+        Requires authentication.
+      security:
+        - Bearer: []
       parameters:
         - in: body
           name: body
@@ -239,11 +263,18 @@ paths:
             $ref: '#/definitions/ServiceTicketInput'
       responses:
         201:
-          description: Service ticket created
+          description: Service ticket created successfully.
           schema:
             $ref: '#/definitions/ServiceTicket'
+        400:
+          description: Invalid input data.
     get:
+      tags:
+        - service_tickets
       summary: Get all service tickets
+      description: |
+        Returns a list of all service tickets in the system.
+        Supports pagination.
       responses:
         200:
           description: List of service tickets
