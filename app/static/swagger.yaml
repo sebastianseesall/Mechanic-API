@@ -11,9 +11,9 @@ info:
 # -------------------------
 # Server configuration
 # -------------------------
-host: "127.0.0.1:5000"
+host: https://mechanic-api-1gww.onrender.com/
 schemes:
-  - "http"
+  - "https"
 consumes:
   - "application/json"
 produces:
