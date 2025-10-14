@@ -3,13 +3,11 @@ from app.models import db #imports db object
 
 from flask_marshmallow import Marshmallow
 from flask import Blueprint, jsonify, send_from_directory
-from flask_swagger_ui import get_swaggerui_blueprint
 
 
 ma = Marshmallow() #sets up marshmallow (serialization/deserialization library)
 
 app = create_app('ProductionConfig') #creates app using config from config.py
-
 
 from sqlalchemy import text
 
@@ -85,14 +83,4 @@ def create_service_ticket():
             format: date
     """
     # ...existing code...
-
-SWAGGER_URL = '/swagger'
-API_URL = '/swagger.yaml'
-
-swaggerui_blueprint = get_swaggerui_blueprint(
-    SWAGGER_URL,
-    API_URL,
-    config={'app_name': "Mechanic API"}
-)
-app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
