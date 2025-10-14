@@ -15,7 +15,8 @@ API_URL = '/swagger.yaml'
 swaggerui_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL,
     API_URL,
-    config={'app_name': "Mechanic API"}
+    config={'app_name': "Mechanic API"},
+    name='swagger_ui_unique'  # <-- add this line
 )
 app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
@@ -26,8 +27,7 @@ with app.app_context():
     # with db.engine.connect() as conn:
     #     conn.execute(text('ALTER TABLE service_ticket_inventory ADD COLUMN quantity INT NOT NULL DEFAULT 1;'))
 
-if __name__ == "__main__":
-    app.run()
+
 
 @app.route('/swagger.yaml')
 def swagger_spec():
