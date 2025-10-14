@@ -15,12 +15,12 @@ API_URL = '/swagger.yaml'
 swaggerui_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL,
     API_URL,
-    config={'app_name': "Mechanic API"},
-    name='swagger_ui_unique'  # <-- add this line
+    config={'app_name': "Mechanic API"}
 )
 app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
 from sqlalchemy import text
+
 
 with app.app_context(): 
     db.create_all() #creates all tables in db (if they don't already exist)
