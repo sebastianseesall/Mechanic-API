@@ -1,5 +1,6 @@
 from app import create_app #gets function to create (flask)app
 from app.models import db #imports db object
+from app.blueprints.service_tickets import service_tickets_bp
 
 from flask_marshmallow import Marshmallow
 from flask import Blueprint, jsonify, send_from_directory
