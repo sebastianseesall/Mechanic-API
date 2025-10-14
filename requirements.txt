@@ -9,3 +9,4 @@ psycopg2-binary
 flask-limiter
 flask-caching
 PyJWT
+python-jose
