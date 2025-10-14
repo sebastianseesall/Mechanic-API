@@ -5,19 +5,11 @@ from flask_marshmallow import Marshmallow
 from flask import Blueprint, jsonify, send_from_directory
 from flask_swagger_ui import get_swaggerui_blueprint
 
+
 ma = Marshmallow() #sets up marshmallow (serialization/deserialization library)
 
 app = create_app('ProductionConfig') #creates app using config from config.py
 
-SWAGGER_URL = '/swagger'
-API_URL = '/swagger.yaml'
-
-swaggerui_blueprint = get_swaggerui_blueprint(
-    SWAGGER_URL,
-    API_URL,
-    config={'app_name': "Mechanic API"}
-)
-app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
 from sqlalchemy import text
 
@@ -31,7 +23,7 @@ with app.app_context():
 
 @app.route('/swagger.yaml')
 def swagger_spec():
-    return send_from_directory('.', 'swagger.yaml')
+    return send_from_directory('.', 'swagger.yaml') 
 
 def some_function():
     ticket = {}  # Assuming ticket is defined somewhere
@@ -93,4 +85,14 @@ def create_service_ticket():
             format: date
     """
     # ...existing code...
+
+SWAGGER_URL = '/swagger'
+API_URL = '/swagger.yaml'
+
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={'app_name': "Mechanic API"}
+)
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
