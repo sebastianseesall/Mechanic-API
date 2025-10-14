@@ -6,3 +6,4 @@ gunicorn
 flask-swagger-ui
 mysql-connector-python
 psycopg2-binary
+flask-limiter
