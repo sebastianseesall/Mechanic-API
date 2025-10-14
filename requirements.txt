@@ -1,4 +1,4 @@
-Flask
+ments.txtFlask
 Flask-SQLAlchemy
 Flask-Marshmallow
 marshmallow-sqlalchemy
@@ -6,3 +6,4 @@ gunicorn
 flask-swagger-ui
 mysql-connector-python
 psycopg2-binary
+flask-limiter
